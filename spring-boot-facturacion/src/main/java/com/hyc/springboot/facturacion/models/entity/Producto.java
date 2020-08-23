@@ -3,11 +3,15 @@ package com.hyc.springboot.facturacion.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,7 +28,24 @@ public class Producto implements Serializable {
 	private Long id;
 	
 	private String nombre;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "unidad_id")
+	private Unidad unidad;
+	
+	private String barras;
+	
 	private Double precio;
+	
+	private Double costo;
+	
+	private Boolean compuesto;
+	
+	private Boolean inventariable;
+	
+	private Boolean exento;
+	
+	private Double existencia;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="create_at")
@@ -64,22 +85,74 @@ public class Producto implements Serializable {
 		return precio;
 	}
 
-
-
 	public void setPrecio(Double precio) {
 		this.precio = precio;
 	}
-
-
 
 	public Date getCreateAt() {
 		return createAt;
 	}
 
-
-
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+
+	
+
+	public Unidad getUnidad() {
+		return unidad;
+	}
+
+	public void setUnidad(Unidad unidad) {
+		this.unidad = unidad;
+	}
+
+	public String getBarras() {
+		return barras;
+	}
+
+	public void setBarras(String barras) {
+		this.barras = barras;
+	}
+
+	public Double getCosto() {
+		return costo;
+	}
+
+	public void setCosto(Double costo) {
+		this.costo = costo;
+	}
+
+	public Boolean getCompuesto() {
+		return compuesto;
+	}
+
+	public void setCompuesto(Boolean compuesto) {
+		this.compuesto = compuesto;
+	}
+
+	public Boolean getInventariable() {
+		return inventariable;
+	}
+
+	public void setInventariable(Boolean inventariable) {
+		this.inventariable = inventariable;
+	}
+
+	public Boolean getExento() {
+		return exento;
+	}
+
+	public void setExento(Boolean exento) {
+		this.exento = exento;
+	}
+
+	public Double getExistencia() {
+		return existencia;
+	}
+
+	public void setExistencia(Double existencia) {
+		this.existencia = existencia;
 	}
 
 

@@ -90,7 +90,7 @@ public class ClienteController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
-			RedirectAttributes flash, SessionStatus status) {
+			Authentication authentication, RedirectAttributes flash, SessionStatus status) {
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "FORMULARIO DE CLIENTE");
 			return "/clientes/form";
@@ -98,7 +98,10 @@ public class ClienteController {
 
 		String mensajeFlash = (cliente.getId() != null) ? "¡Cliente editado con éxito!"
 				: "¡Cliente registrado con éxito!";
-
+		
+		if(cliente.getId() == null){
+			cliente.setUsuario(authentication.getName());
+		}
 		clienteService.save(cliente);
 		status.setComplete();// Elimina el objeto cliente en sesion
 		flash.addFlashAttribute("success", mensajeFlash);

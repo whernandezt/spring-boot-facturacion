@@ -33,18 +33,6 @@ public class Usuario implements Serializable {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-
 	@Column(length = 60)
 	private String password;
 
@@ -70,6 +58,18 @@ public class Usuario implements Serializable {
 		this.username = username;
 	}
 
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+	
 	public String getPassword() {
 		return password;
 	}

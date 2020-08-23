@@ -13,13 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 //import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -39,59 +41,37 @@ public class Cliente implements Serializable {
 
 	@Email
 	private String email;
-	
+
+	@Pattern(regexp = "")
+	private String dui;
+
 	private String nit;
-	
+
 	private String telefono;
-	
+
 	private String direccion;
 
-	public String getNit() {
-		return nit;
-	}
-
-	public void setNit(String nit) {
-		this.nit = nit;
-	}
-
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
-	public String getDireccion() {
-		return direccion;
-	}
-
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
-
-
-
-	@NotNull
+	@Column(length = 30)
+	private String usuario;
+	
 	@Column(name = "create_at") // en caso que el nombre del campo de la tabla sea diferente al del atributo
 	@Temporal(TemporalType.DATE) // formato con el que se guarda en la base de datos
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
 
-	private String foto;
-
 	// Relacion muchas facturas tiene un cliente
-	//mappedBy es el campo al que esta mapeado, automaticamente creara cliente_id como foranea
+	// mappedBy es el campo al que esta mapeado, automaticamente creara cliente_id
+	// como foranea
 	// CascadeType.ALL si se elimina el cliente se eliminan todas sus facturas
 	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Factura> facturas;
 
-	/*
-	 * @PrePersist //Antes de guardar que asigne la fecha actual public void
-	 * prePersist() { createAt = new Date(); }
-	 */
-	
+	@PrePersist // Antes de guardar que asigne la fecha actual
+	public void prePersist() {
+		createAt = createAt == null ? new Date() : createAt;
+	}
+
 	public Cliente() {
 
 		facturas = new ArrayList<Factura>();
@@ -129,12 +109,44 @@ public class Cliente implements Serializable {
 		this.createAt = createAt;
 	}
 
-	public String getFoto() {
-		return foto;
+	public String getNit() {
+		return nit;
 	}
 
-	public void setFoto(String foto) {
-		this.foto = foto;
+	public void setNit(String nit) {
+		this.nit = nit;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public String getDui() {
+		return dui;
+	}
+
+	public void setDui(String dui) {
+		this.dui = dui;
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 	public List<Factura> getFacturas() {
@@ -153,6 +165,7 @@ public class Cliente implements Serializable {
 	public String toString() {
 		return nombre;
 	}
+
 	private static final long serialVersionUID = 1L;
 
 }
