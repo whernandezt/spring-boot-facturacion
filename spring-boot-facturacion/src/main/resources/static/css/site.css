@@ -1,0 +1,31 @@
+body {
+	font-size: 12pt;
+}
+
+.card-columns .card:hover {
+	background-color: #6c757d !important;
+	border-color: #6c757d !important;
+	color: white;
+}
+
+.link-new {
+	text-decoration: none;
+	color: black;
+}
+
+.dataTables_length label {
+	display: inline-flex;
+}
+
+.dataTables_filter {
+	float: right;
+    padding-right: 6em;
+}
+
+.dataTables_filter label {
+	display: inline-flex;
+}
+
+.dataTables_wrapper .row .col-md-6 {
+	display:none;
+}
