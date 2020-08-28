@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hyc.springboot.facturacion.models.dao.IClienteDao;
 import com.hyc.springboot.facturacion.models.dao.IFacturaDao;
 import com.hyc.springboot.facturacion.models.dao.IProductoDao;
+import com.hyc.springboot.facturacion.models.dao.ITipoDocumentoDao;
 import com.hyc.springboot.facturacion.models.entity.Cliente;
 import com.hyc.springboot.facturacion.models.entity.Factura;
 import com.hyc.springboot.facturacion.models.entity.Producto;
+import com.hyc.springboot.facturacion.models.entity.TipoDocumento;
 
 
 @Service
@@ -28,6 +30,9 @@ public class ClienteServiceImpl implements IClienteService {
 	
 	@Autowired
 	private IFacturaDao facturaDao;
+	
+	@Autowired
+	private ITipoDocumentoDao tipoDocumentoDao;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -103,6 +108,32 @@ public class ClienteServiceImpl implements IClienteService {
 	@Transactional(readOnly=true)
 	public Factura fetchFacturaByIdWithClienteWithItemFacturaWithPoducto(Long id) {
 		return facturaDao.fetchByIdWithClienteWithItemFacturaWithPoducto(id);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public List<Factura> findFacturas() {
+		return (List<Factura>) facturaDao.findAll();
+	}
+
+	@Override
+	public List<TipoDocumento> findTipoDocumentos() {
+		return (List<TipoDocumento>) tipoDocumentoDao.findAll();
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public TipoDocumento findTipoDocumentoById(Long id) {
+		return tipoDocumentoDao.findById(id).get();
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public int siguienteNumeroRecibo(Long tipoDoc) {
+		if (tipoDoc == 1) {
+			return facturaDao.siguienteNumeroRecibo(tipoDoc);
+		}
+		return 0;
 	}
 	
 }

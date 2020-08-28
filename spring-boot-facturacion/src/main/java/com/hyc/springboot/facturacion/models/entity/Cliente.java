@@ -23,7 +23,7 @@ import javax.validation.constraints.NotEmpty;
 //import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import org.springframework.format.annotation.DateTimeFormat;
+//import org.springframework.format.annotation.DateTimeFormat;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -55,8 +55,8 @@ public class Cliente implements Serializable {
 	private String usuario;
 	
 	@Column(name = "create_at") // en caso que el nombre del campo de la tabla sea diferente al del atributo
-	@Temporal(TemporalType.DATE) // formato con el que se guarda en la base de datos
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.TIMESTAMP) // formato con el que se guarda en la base de datos
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
 
 	// Relacion muchas facturas tiene un cliente
@@ -69,7 +69,7 @@ public class Cliente implements Serializable {
 
 	@PrePersist // Antes de guardar que asigne la fecha actual
 	public void prePersist() {
-		createAt = createAt == null ? new Date() : createAt;
+		createAt = new Date();//createAt == null ? new Date() : createAt;
 	}
 
 	public Cliente() {

@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+	<div class="container py-2">
+		<div class="card bg-light">
+			<div class="card-header font-weight-bold">
+				<i class="fas fa-file-invoice-dollar"></i> <span th:text="${titulo}"></span>
+				<div class="float-right text-right mr-0 p-0">
+
+					<a th:href="@{/facturas}" data-toggle="tooltip"
+						data-placement="bottom" title="Regresar" class="link-new"> <i
+						class="fas fa-arrow-alt-circle-left"></i>
+					</a>
+					<a th:href="@{'/facturas/ver/' +  ${factura.id}(format=pdf)}" data-toggle="tooltip"
+						data-placement="bottom" title="Imprimir" class="link-new"> <i
+						class="fa fa-print"></i>
+					</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12 col-md-3 mb-3">
+						<h6>Fecha</h6>
+						<span th:text="${#dates.format(factura.createAt, 'dd/MM/yyyy')}"></span>
+					</div>
+					<div class="col-6 col-md-3 mb-3">
+						<h6>Tipo Documento</h6><span
+							th:text="${factura.tipoDocumento}"></span>
+					</div>
+					<div class="col-6 col-md-3 mb-3">
+						<h6>Número</h6>
+						<span th:text="${factura.numero}"></span>
+					</div>
+					<div class="col-12 col-md-3 mb-3">
+						<span class="badge badge-danger" th:if="${factura.isAnulada()}" th:text="Anulada"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-3 mb-3">
+						<h6>Cliente</h6>
+						<span th:text="${factura.cliente}"></span>
+					</div>
+					<div class="col-12 col-md-9 mb-3">
+						<h6>Descripción</h6><span
+							th:text="${factura.descripcion}"></span>
+					</div>
+				</div>
+
+				<table class="table table-sm table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Producto</th>
+							<th>Precio</th>
+							<th>Cantidad</th>
+							<th class="text-right">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item:${factura.items}">
+							<td th:text="${item.producto.nombre}"></td>
+							<td th:text="'$' + ${#numbers.formatDecimal(item.precio, 0, 'COMMA', 2, 'POINT')}"></td>
+							<td th:text="${item.cantidad}"></td>
+							<td class="text-right" th:text="'$' + ${#numbers.formatDecimal(item.calcularImporte(), 0, 'COMMA', 2, 'POINT')}"></td>
+						</tr>
+					</tbody>
+				</table>
+				<h5 class="float-right">
+					Total: <span class="badge badge-secondary"
+						th:text="'$' + ${#numbers.formatDecimal(factura.total, 0, 'COMMA', 2, 'POINT')}"></span>
+				</h5>
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.hyc.springboot.facturacion.models.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,8 @@ public class TipoDocumento implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(length = 50)
 	private String nombre;
 	
 	
@@ -35,6 +38,11 @@ public class TipoDocumento implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+	
+	@Override
+	public String toString() {
+		return nombre;
 	}
 
 

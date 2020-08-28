@@ -20,7 +20,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-@Component("factura/ver")//igual a la vista que retorna el controlador
+@Component("facturas/ver")//igual a la vista que retorna el controlador
 public class FacturaPdfView extends AbstractPdfView {
 	
 	/*Multilenguaje
@@ -30,6 +30,7 @@ public class FacturaPdfView extends AbstractPdfView {
 	@Autowired
 	private LocaleResolver localeResolver;
 */
+	
 	@Override
 	protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {

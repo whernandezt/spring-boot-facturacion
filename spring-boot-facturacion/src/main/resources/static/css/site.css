@@ -1,5 +1,11 @@
 body {
-	font-size: 10pt;
+	font-weight: normal;
+    font-size: medium;
+    font-style: normal;
+}
+
+i{
+	font-size: 13pt;
 }
 
 .card-columns .card:hover {
@@ -40,4 +46,17 @@ body {
     background: #428bca !important;
     border-color: #357ebd !important;
     box-shadow: none !important;
+}
+
+.enMoney::before {
+    content:"$";
+}
+.negMoney {
+    color:red;
+}
+div.negMoney::before {
+    content:'($';
+}
+div.negMoney::after {
+    content:')';
 }

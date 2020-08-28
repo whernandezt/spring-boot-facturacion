@@ -2,16 +2,13 @@ package com.hyc.springboot.facturacion.controllers;
 
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -41,43 +38,19 @@ public class ClienteController {
 	private IClienteService clienteService;
 
 	
-	@Autowired
-	private MessageSource messageSource;
-
-
-	@Secured("ROLE_USER")
-	@RequestMapping(value = "/ver/{id}", method = RequestMethod.GET)
-	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-
-		Cliente cliente = clienteService.fetchClienteByIdWithFacturas(id);//clienteService.findOne(id);
-
-		if (cliente == null) {
-			flash.addFlashAttribute("error", "El cliente no existe en la base de datos.");
-			return "redirect:/listar";
-		}
-
-		model.put("titulo", "Detalle de Cliente");
-		model.put("cliente", cliente);
-
-		return "/clientes/ver";
-	}
-	
 	@Secured("ROLE_USER")
 	@RequestMapping(value = {"/",""}, method = RequestMethod.GET)
-	public String listar(Model model,
-			Authentication authentication,
-			HttpServletRequest request,
-			Locale locale) {
+	public String listar(Model model) {
 
 		List<Cliente> clientes = clienteService.findAll();
 
-		model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
+		model.addAttribute("titulo", "CLIENTES");
 		model.addAttribute("clientes", clientes);
 		return "/clientes/listar";
 
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/form")
 	public String crear(Map<String, Object> model) {
 		Cliente cliente = new Cliente();
@@ -87,7 +60,7 @@ public class ClienteController {
 	}
 
 
-	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
 			Authentication authentication, RedirectAttributes flash, SessionStatus status) {
@@ -105,11 +78,11 @@ public class ClienteController {
 		clienteService.save(cliente);
 		status.setComplete();// Elimina el objeto cliente en sesion
 		flash.addFlashAttribute("success", mensajeFlash);
-		return "redirect:../clientes";
+		return "redirect:/clientes";
 	}
 
 
-	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_USER")
 	@RequestMapping(value = "/form/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
@@ -119,11 +92,11 @@ public class ClienteController {
 			cliente = clienteService.findOne(id);
 			if (cliente == null) {
 				flash.addFlashAttribute("error", "¡El Id del cliente no existe!");
-				return "redirect:/listar";
+				return "redirect:/clientes";
 			}
 		} else {
 			flash.addFlashAttribute("error", "¡El Id del cliente debe ser mayor a 0!");
-			return "redirect:../";
+			return "redirect:/clientes/listar";
 		}
 		model.put("cliente", cliente);
 		model.put("titulo", "Editar Cliente");
@@ -135,10 +108,16 @@ public class ClienteController {
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
-			// Se busca cliente para eliminar la imagen, solo para eliminar no se necesita
+			Cliente cliente = clienteService.findOne(id);
+			if (cliente == null) {
+				flash.addFlashAttribute("error", "¡El Id del cliente no existe!");
+				return "redirect:/clientes";
+			}
+			else {
 			clienteService.delete(id);
 			flash.addFlashAttribute("success", "¡Cliente eliminado con éxito!");
+			}
 		}
-		return "redirect:../";
+		return "redirect:/clientes";
 	}
 }

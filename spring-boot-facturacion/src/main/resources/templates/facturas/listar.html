@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf/extras/spring-security">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+	<div class="container py-2">
+		<div class="card bg-light">
+			<div class="card-header font-weight-bold">
+				<i class="fas fa-file-invoice-dollar"></i> <span th:text="${titulo}"></span>
+				<div class="float-right text-right m-0 p-0">
+					<div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+						<div class="input-group">
+							<input type="text" class="form-control form-control-sm search"
+								autofocus="autofocus" aria-label="Buscar"
+								aria-describedby="basic-addon2"></input>
+							<div class="input-group-append">
+								<button class="btn btn-sm btn-dark" type="button">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<a th:href="@{/facturas/form}" data-toggle="tooltip"
+						data-placement="bottom" title="Nuevo" class="link-new"> <i
+						class="fas fa-plus-circle"></i>
+					</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<table class="table table-responsive table-striped primaryTable">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Tipo Documento</th>
+							<th>Número</th>
+							<th>Fecha</th>
+							<th>Cliente</th>
+							<th>Monto</th>
+							<th style="width: 1%;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="factura:${facturas}">
+							<td th:text="${factura.tipoDocumento}"></td>
+							<td th:text="${factura.numero}"></td>
+							<td >
+							<a th:text="${#dates.format(factura.createAt, 'dd/MM/yyyy')}" th:href="@{/facturas/ver/} + ${factura.id}">
+							</a>
+							</td>
+							<td th:text="${factura.cliente}"></td>
+							<td th:text="'$' + ${#numbers.formatDecimal(factura.total, 0, 'COMMA', 2, 'POINT')}"></td> 
+								<td>
+								<span class="badge badge-danger" th:if="${factura.isAnulada()}" th:text="Anulada"></span>
+							</td>
+						</tr> 
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

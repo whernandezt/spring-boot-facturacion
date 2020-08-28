@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -26,21 +27,33 @@ import com.hyc.springboot.facturacion.models.entity.Cliente;
 import com.hyc.springboot.facturacion.models.entity.Factura;
 import com.hyc.springboot.facturacion.models.entity.ItemFactura;
 import com.hyc.springboot.facturacion.models.entity.Producto;
+import com.hyc.springboot.facturacion.models.entity.TipoDocumento;
 import com.hyc.springboot.facturacion.models.service.IClienteService;
 
 //Al ponerlo arriba de la clase lo aplica a todos los metodos
-@Secured("ROLE_ADMIN")
+@Secured("ROLE_USER")
 @Controller
-@RequestMapping("/factura")
+@RequestMapping("/facturas")
 @SessionAttributes("factura")
 public class FacturaController {
 	
 	@Autowired
 	private IClienteService clienteService;
 	
-	private final Logger log = LoggerFactory.getLogger(getClass());
-
+	//private final Logger log = LoggerFactory.getLogger(getClass());
 	
+	@Secured("ROLE_USER")
+	@RequestMapping(value = {"/",""}, method = RequestMethod.GET)
+	public String listar(Model model) {
+
+		List<Factura> facturas = clienteService.findFacturas();
+
+		model.addAttribute("titulo", "VENTAS");
+		model.addAttribute("facturas", facturas);
+		return "facturas/listar";
+
+	}
+
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable Long id, Model model, RedirectAttributes flash) {
 		
@@ -51,69 +64,93 @@ public class FacturaController {
 			return "redirect:/listar";
 		}
 		
-		model.addAttribute("titulo", "Factura: ".concat(factura.getDescripcion()));
+		model.addAttribute("titulo", "DETALLE DE VENTA");
 		model.addAttribute("factura", factura);
 		
-		return "factura/ver";
+		return "facturas/ver";
 	}
 	
-	@GetMapping("/form/{clienteId}")
-	public String crear(@PathVariable(value="clienteId") Long clienteId, Map<String, Object> model, RedirectAttributes flash) {
+	@GetMapping("/form")
+	public String crear(Map<String, Object> model, RedirectAttributes flash) {
 		
-		Cliente cliente = clienteService.findOne(clienteId);
-		if(cliente == null) {
-			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
-			return "redict:/listar";
-		}
+		List<Cliente> clientes =  clienteService.findAll();
+		List<TipoDocumento> tipoDocumentos =  clienteService.findTipoDocumentos();
 		
 		Factura factura = new Factura();
-		factura.setCliente(cliente);
 		
 		model.put("factura", factura);
-		model.put("titulo", "Crear Factura");
-		return "factura/form";
-	}
-	
-	//@ResponseBody indica que es un jason
-	@GetMapping(value="/cargar-productos/{term}", produces= {"application/json"})
-	public @ResponseBody List<Producto> cargarProductos(@PathVariable String term){
-		//return clienteService.findByNombre(term);
-		return clienteService.findByNombre(term);
+		model.put("clientes", clientes);
+		model.put("tipoDocumentos", tipoDocumentos);
+		model.put("titulo", "REGISTRO DE VENTA");
+		return "facturas/form";
 	}
 	
 	@PostMapping("/form")
 	public String guardar(@Valid Factura factura,
 			BindingResult result,
-			Model model,
+			Map<String, Object> model,
 			@RequestParam(name="item_id[]", required=false) Long[] itemId,
-			@RequestParam(name="cantidad[]", required=false) Integer[] cantidad,
+			@RequestParam(name="cantidad[]", required=false) Double[] cantidad,
 			RedirectAttributes flash,
 			SessionStatus status) {
 		
 		if(result.hasErrors()) {
-			model.addAttribute("titulo", "Crear Factura");
-			return "factura/form";
+			
+			List<Cliente> clientes =  clienteService.findAll();
+			List<TipoDocumento> tipoDocumentos =  clienteService.findTipoDocumentos();
+			
+			model.put("titulo", "REGISTRO DE VENTA");
+			model.put("clientes", clientes);
+			model.put("tipoDocumentos", tipoDocumentos);
+			return "facturas/form";
 		}
+		
+		if(factura.getCliente() == null) {
+			List<Cliente> clientes =  clienteService.findAll();
+			List<TipoDocumento> tipoDocumentos =  clienteService.findTipoDocumentos();
+			
+			model.put("titulo", "REGISTRO DE VENTA");
+			model.put("error", "Error: Seleccione un cliente.");
+			model.put("clientes", clientes);
+			model.put("tipoDocumentos", tipoDocumentos);
+			return "facturas/form";
+		}
+		
 		if(itemId == null || itemId.length == 0) {
-			model.addAttribute("titulo", "Crear Factura");
-			model.addAttribute("error", "Error: La factura debe tener al menos un detalle.");
-			return "factura/form";
+			List<Cliente> clientes =  clienteService.findAll();
+			List<TipoDocumento> tipoDocumentos =  clienteService.findTipoDocumentos();
+			
+			model.put("titulo", "REGISTRO DE VENTA");
+			model.put("error", "Error: La factura debe tener al menos un detalle.");
+			model.put("clientes", clientes);
+			model.put("tipoDocumentos", tipoDocumentos);
+			return "facturas/form";
 		}
 		
 		for(int i = 0; i < itemId.length; i++) {
 			Producto producto = clienteService.findProductoById(itemId[i]);
 			
+			if( producto.getExistencia() < cantidad[i]) {
+				List<Cliente> clientes =  clienteService.findAll();
+				List<TipoDocumento> tipoDocumentos =  clienteService.findTipoDocumentos();
+				
+				model.put("titulo", "REGISTRO DE VENTA");
+				model.put("error", "Error: El producto ".concat(producto.getNombre()).concat(" no tiene existencia suficiente (".concat(producto.getExistencia().toString()).concat(")")));
+				model.put("clientes", clientes);
+				model.put("tipoDocumentos", tipoDocumentos);
+				return "facturas/form";
+			}
 			ItemFactura linea = new ItemFactura();
 			linea.setCantidad(cantidad[i]);
 			linea.setProducto(producto);
+			linea.setPrecio(producto.getPrecio());
 			factura.addItemFactura(linea);
-			
-			log.info("ID: " + itemId[i].toString() + ", CANTIDAD: " + cantidad[i].toString());
+			factura.setNumero(clienteService.siguienteNumeroRecibo(factura.getTipoDocumento().getId()));
 		}
 		
 		clienteService.saveFactura(factura);
 		status.setComplete();
-		flash.addFlashAttribute("success", "Factura creada con éxito!");
+		flash.addFlashAttribute("success", "Venta creada con éxito!");
 		
 		return "redirect:../ver/" + factura.getId().toString();
 	}
@@ -124,10 +161,18 @@ public class FacturaController {
 		Factura factura = clienteService.findFacturaById(id);
 		if(factura != null){
 			clienteService.deleteFactura(id);
-			flash.addFlashAttribute("success", "¡Factura eliminada con éxito!");
+			flash.addFlashAttribute("success", "¡Venta eliminada con éxito!");
 			return "redirect:/ver/"+ factura.getCliente().getId().toString();
 		}
-		flash.addFlashAttribute("error", "¡Factura no existe en la base de dados!");
+		flash.addFlashAttribute("error", "¡Venta no existe en la base de dados!");
 		return "redirect:/listar";
 	}
+	
+	//@ResponseBody indica que es un jason
+	@GetMapping(value="/cargar-productos/{term}", produces= {"application/json"})
+	public @ResponseBody List<Producto> cargarProductos(@PathVariable String term){
+		//return clienteService.findByNombre(term);
+		return clienteService.findByNombre(term);
+	}
+		
 }

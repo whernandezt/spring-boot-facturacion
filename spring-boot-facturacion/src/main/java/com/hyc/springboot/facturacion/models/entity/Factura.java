@@ -19,10 +19,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotEmpty;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -33,19 +31,24 @@ public class Factura implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "tipo_documento_id") 
+	private TipoDocumento tipoDocumento;
+	
+	private String serie;
+	
+	private Integer numero;
 
-	@NotEmpty
+	
 	private String descripcion;
-	private String observacion;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Temporal(TemporalType.DATE)
+	
+	private Boolean anulada;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_at")
 	private Date createAt;
 
-	// Relacion en la base de datos, muchas facturas tiene un cliente
-	// Fetch lazy es una carga perozosa para que no traiga los datos del cliente por
-	// default solo por el get
 	@JsonBackReference //Para serializar json se omite
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Cliente cliente;
@@ -62,6 +65,7 @@ public class Factura implements Serializable {
 	@PrePersist // Antes de guardar que asigne la fecha actual
 	public void prePersist() {
 		createAt = new Date();
+		anulada = false;
 	}
 
 	public void setId(Long id) {
@@ -70,10 +74,6 @@ public class Factura implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	public void setObservacion(String observacion) {
-		this.observacion = observacion;
 	}
 
 	public void setCreateAt(Date createAt) {
@@ -92,10 +92,6 @@ public class Factura implements Serializable {
 		return descripcion;
 	}
 
-	public String getObservacion() {
-		return observacion;
-	}
-
 	public Date getCreateAt() {
 		return createAt;
 	}
@@ -111,6 +107,38 @@ public class Factura implements Serializable {
 
 	public void setItems(List<ItemFactura> items) {
 		this.items = items;
+	}
+
+	public TipoDocumento getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(TipoDocumento tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public String getSerie() {
+		return serie;
+	}
+
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+
+	public Integer getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
+
+	public Boolean isAnulada() {
+		return anulada;
+	}
+
+	public void setAnulada(Boolean anulada) {
+		this.anulada = anulada;
 	}
 
 	public void addItemFactura(ItemFactura item) {

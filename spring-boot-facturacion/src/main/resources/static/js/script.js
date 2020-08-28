@@ -5,4 +5,8 @@ $(document).ready( function () {
           oTable.search($(this).val()).draw() ;
     })
     
+    $('.searchDrop').selectize({
+        sortField: 'text'
+    });
+    
 } );

@@ -17,69 +17,58 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 @Entity
-@Table(name="productos")
+@Table(name = "productos")
 public class Producto implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String nombre;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "unidad_id")
 	private Unidad unidad;
-	
+
 	private String barras;
-	
+
 	private Double precio;
-	
+
 	private Double costo;
-	
+
 	private Boolean compuesto;
-	
+
 	private Boolean inventariable;
-	
+
 	private Boolean exento;
-	
+
 	private Double existencia;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name="create_at")
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_at")
 	private Date createAt;
-	
+
 	@PrePersist // Antes de guardar que asigne la fecha actual
 	public void prePersist() {
 		createAt = new Date();
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
-
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-
 	public String getNombre() {
 		return nombre;
 	}
 
-
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-
 
 	public Double getPrecio() {
 		return precio;
@@ -96,8 +85,6 @@ public class Producto implements Serializable {
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
 	}
-
-	
 
 	public Unidad getUnidad() {
 		return unidad;
@@ -148,14 +135,12 @@ public class Producto implements Serializable {
 	}
 
 	public Double getExistencia() {
-		return existencia;
+		return existencia == null ? 0 : existencia;
 	}
 
 	public void setExistencia(Double existencia) {
 		this.existencia = existencia;
 	}
-
-
 
 	private static final long serialVersionUID = 1L;
 

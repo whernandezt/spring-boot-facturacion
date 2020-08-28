@@ -8,7 +8,7 @@
 				
 				source: function(request, response){
 					$.ajax({
-						url: "/factura/cargar-productos/" + request.term,
+						url: "/facturas/cargar-productos/" + request.term,
 						dataType: "json",
 						data: {
 							term: request.term
@@ -29,18 +29,19 @@
 					//$("#buscar_producto").val(ui.item.label);
 					
 					if(itemsHelper.hasProducto(ui.item.value)){
-						itemsHelper.incrementaCantidad(ui.item.value, ui.item.precio)
+						itemsHelper.incrementaCantidad(ui.item.value, ui.item.precio.toString())
 						return false;
 					}
 					
 					var linea = $("#plantillaItemsFactura").html();
 					
+					
 					linea = linea.replace(/{ID}/g, ui.item.value);
 					linea = linea.replace(/{NOMBRE}/g, ui.item.label);
-					linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+					linea = linea.replace(/{PRECIO}/g, '$' + ui.item.precio.toString());
 					
 					$("#cargarItemProductos tbody").append(linea);
-					itemsHelper.calcularImporte(ui.item.value, ui.item.precio, 1);
+					itemsHelper.calcularImporte(ui.item.value, ui.item.precio.toString(), 1);
 					return false;
 				}
 			});
@@ -53,7 +54,8 @@
 		
 		var itemsHelper = {
 				calcularImporte: function(id, precio, cantidad){
-					$("#total_importe_" + id).html(parseInt(precio) * parseInt(cantidad));
+					var num = Number(parseFloat(precio.toString().replace('$','')) * parseFloat(cantidad)).toLocaleString('en');  
+					$("#total_importe_" + id).html('$' + num);
 					this.calculaGrandTotal();
 				},
 				hasProducto: function(id){
@@ -67,7 +69,7 @@
 					return resultado;
 				},
 				incrementaCantidad: function(id, precio){
-					var cantidad = $("#cantidad_" + id).val() ? parseInt($("#cantidad_" + id).val()) :0;
+					var cantidad = $("#cantidad_" + id).val() ? parseFloat($("#cantidad_" + id).val()) : 0;
 					$("#cantidad_" + id).val(++cantidad);
 					this.calcularImporte(id, precio, cantidad);
 				},
@@ -79,10 +81,12 @@
 					var total = 0;
 					
 					$('span[id^="total_importe_"]').each(function(){
-						total += parseInt($(this).html());
+						total += parseFloat($(this).html().replace(',','').replace('$',''));
 					});
 					
-					$("#grand_total").html(total);
+					var num = Number(total).toLocaleString('en');  
+					
+					$("#grand_total").html('$' + num);
 				}
 		}
 	</script>

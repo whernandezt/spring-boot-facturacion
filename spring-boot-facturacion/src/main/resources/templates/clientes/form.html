@@ -8,6 +8,13 @@
 		<div class="card bg-light">
 			<div class="card-header font-weight-bold">
 				<i class="fa fa-users"></i> <span th:text="${titulo}"></span>
+				<div class="float-right text-right mr-0 p-0">
+
+                <a th:href="@{/clientes}" data-toggle="tooltip"
+						data-placement="bottom" title="Nuevo" class="link-new"> <i
+						class="fas fa-arrow-alt-circle-left"></i>
+					</a>
+                </div>
 			</div>
 			<div class="card-body">
 				<ul class="nav nav-tabs" id="myTab" role="tablist">

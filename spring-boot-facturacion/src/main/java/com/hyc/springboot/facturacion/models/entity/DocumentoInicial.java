@@ -12,11 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="documentos_inicial")
@@ -36,15 +36,16 @@ public class DocumentoInicial implements Serializable {
 	
 	private Integer hasta;
 	
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date vigencia;
+	private Boolean activo;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="create_at")
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createAt;
 	
+	@PrePersist // Antes de guardar que asigne la fecha actual
+	public void prePersist() {
+		createAt = new Date();
+	}
 	
 	
 	public Long getId() {
@@ -107,26 +108,12 @@ public class DocumentoInicial implements Serializable {
 
 
 
-	public Date getVigencia() {
-		return vigencia;
+	public Boolean isActivo() {
+		return this.activo;
 	}
 
-
-
-	public void setVigencia(Date vigencia) {
-		this.vigencia = vigencia;
-	}
-
-
-
-	public Date getCreateAt() {
-		return createAt;
-	}
-
-
-
-	public void setCreateAt(Date createAt) {
-		this.createAt = createAt;
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 
 
