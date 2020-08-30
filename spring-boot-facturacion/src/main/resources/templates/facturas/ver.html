@@ -17,6 +17,10 @@
 						data-placement="bottom" title="Imprimir" class="link-new"> <i
 						class="fa fa-print"></i>
 					</a>
+					<a th:if="${not factura.isAnulada()}" th:href="@{'/facturas/anular/' +  ${factura.id}}" 
+					data-toggle="tooltip" data-placement="bottom" title="Anular" class="link-new" onclick="return confirm('¿Seguro que desea anular el documento?');"> <i
+						class="fas fa-trash"></i>
+					</a>
 				</div>
 			</div>
 			<div class="card-body">

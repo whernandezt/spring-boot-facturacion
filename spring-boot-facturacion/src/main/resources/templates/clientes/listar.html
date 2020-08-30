@@ -40,25 +40,27 @@
 				<table class="table table-responsive table-striped primaryTable">
 					<thead class="thead-inverse">
 						<tr>
+						<th  style="width: 1%;"></th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')" style="width: 1%;"></th>
 							<th th:text="#{text.cliente.nombre}"></th>
 							<th th:text="#{text.cliente.telefono}"></th>
 							<th th:text="#{text.cliente.email}"></th>
-							<th th:text="#{text.cliente.createAt}"></th>
+							<th th:text="DirecciÃ³n"></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="cliente:${clientes}">
+							<td  style="width: 1%;"></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a
-								class="link-new"
+								class="link-new" data-toggle="tooltip" title="Eliminar"
 								th:href="@{/clientes/eliminar/} + ${cliente.id}"
-								onclick="return confirm('¿Seguro que desea eliminar el cliente?');">
-								<i class="fas fa-trash-alt"></i></a></td>
+								onclick="return confirm('ï¿½Seguro que desea eliminar el cliente?');">
+								<i class="fas fa-trash"></i></a></td>
 							<td><a th:href="@{/clientes/form/} + ${cliente.id}"
 								th:text="${cliente.nombre}"></a></td>
 							<td th:text="${cliente.telefono}"></td>
 							<td th:text="${cliente.email}"></td>
-							<td th:text="${cliente.createAt}"></td>
+							<td th:text="${cliente.direccion}"></td>
 						</tr>
 					</tbody>
 				</table>

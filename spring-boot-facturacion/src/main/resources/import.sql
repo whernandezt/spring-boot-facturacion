@@ -25,13 +25,26 @@ INSERT INTO clientes (nombre, email, create_at) VALUES ('David Quezada', 'hqueza
 INSERT INTO clientes (nombre, email, create_at) VALUES ('Yuri Quijada', 'jquijada.t@gmail.com', '2019-03-05');
 
 /* Populate table productos */
-insert into productos (nombre, precio, costo, existencia, create_at) values ('Panasonic Pantalla LCD', 150.99, 100, 89, now());
-insert into productos (nombre, precio, costo, existencia, create_at) values ('Sony Camara difital DSC-W320B', 360.99, 300, 150, now());
-insert into productos (nombre, precio, costo, existencia, create_at) values ('Apple iPod shuffle', 99.90, 50, 25, now());
-insert into productos (nombre, precio, costo, existencia, create_at) values ('Sony Notbook Z110', 489.68, 400, 10, now());
-insert into productos (nombre, precio, costo, existencia, create_at) values ('Hewlett Packard Multifuncional F2280', 130.54, 100, 13, now());
-insert into productos (nombre, precio, costo, existencia, create_at) values ('Bianchi Bicicleta Aro 26', 189.00, 100, 5, now());
-insert into productos (nombre, precio, costo, existencia, create_at) values ('Mica Comoda 5 Cajones', 35.25, 30, 8, now());
+insert into productos (nombre, precio, costo, existencia, create_at, inventariable, exento) values ('Panasonic Pantalla LCD', 150.99, 100, 89, now(), true, false);
+insert into productos (nombre, precio, costo, existencia, create_at, inventariable, exento) values ('Sony Camara difital DSC-W320B', 360.99, 300, 150, now(), true, false);
+insert into productos (nombre, precio, costo, existencia, create_at, inventariable, exento) values ('Apple iPod shuffle', 99.90, 50, 25, now(), true, false);
+insert into productos (nombre, precio, costo, existencia, create_at, inventariable, exento) values ('Sony Notbook Z110', 489.68, 400, 10, now(), true, false);
+insert into productos (nombre, precio, costo, existencia, create_at, inventariable, exento) values ('Hewlett Packard Multifuncional F2280', 130.54, 100, 13, now(), true, false);
+insert into productos (nombre, precio, costo, existencia, create_at, inventariable, exento) values ('Bianchi Bicicleta Aro 26', 189.00, 100, 5, now(), true, false);
+insert into productos (nombre, precio, costo, existencia, create_at, inventariable, exento) values ('Mica Comoda 5 Cajones', 35.25, 30, 8, now(), true, false);
+
+insert into tipos_movimiento_inv(nombre, accion) values('Inventario inicial', 'I');
+insert into tipos_movimiento_inv(nombre, accion) values('Entra por compra', 'I');
+insert into tipos_movimiento_inv(nombre, accion) values('Salida por venta', 'D');
+insert into tipos_movimiento_inv(nombre, accion) values('Ajuste de inventario (Entrada)', 'I');
+insert into tipos_movimiento_inv(nombre, accion) values('Ajuste de inventario (Salida)', 'D');
+
+insert into kardex(tipo_movimiento_id, producto_id, cantidad, costo, saldo, costo_saldo, total_saldo) values(1, 1, 89, 100, 89, 100, 89*100);
+insert into kardex(tipo_movimiento_id, producto_id, cantidad, costo, saldo, costo_saldo, total_saldo) values(1, 2, 150, 300, 150, 300, 150*300);
+insert into kardex(tipo_movimiento_id, producto_id, cantidad, costo, saldo, costo_saldo, total_saldo) values(1, 3, 25, 50, 25, 50, 25*50);
+insert into kardex(tipo_movimiento_id, producto_id, cantidad, costo, saldo, costo_saldo, total_saldo) values(1, 4, 10, 400, 10, 400, 10*400);
+insert into kardex(tipo_movimiento_id, producto_id, cantidad, costo, saldo, costo_saldo, total_saldo) values(1, 5, 13, 100, 13, 100, 13*100);
+insert into kardex(tipo_movimiento_id, producto_id, cantidad, costo, saldo, costo_saldo, total_saldo) values(1, 6, 8, 35.25, 8, 35.25, 8*35.25);
 
 /* Populate tipos documentos */
 insert into tipos_documento(nombre) values('Recibo');

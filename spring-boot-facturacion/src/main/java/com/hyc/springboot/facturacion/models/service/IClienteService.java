@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 import com.hyc.springboot.facturacion.models.entity.Cliente;
 import com.hyc.springboot.facturacion.models.entity.Factura;
+import com.hyc.springboot.facturacion.models.entity.Kardex;
 import com.hyc.springboot.facturacion.models.entity.Producto;
 import com.hyc.springboot.facturacion.models.entity.TipoDocumento;
+import com.hyc.springboot.facturacion.models.entity.TipoMovimientoInv;
 
 
 
@@ -25,16 +27,19 @@ public interface IClienteService {
 
 	public void delete(Long id);
 	
+	/*Productos*/
+	public Producto findProductoById(Long id);
+	
+	public List<Producto> findByNombre(String term);
+	
+	public void saveProducto(Producto producto);
+	
 	/*Facturas*/
 	public List<Factura> findFacturas();
 	
 	public List<TipoDocumento> findTipoDocumentos();
 	
-	public List<Producto> findByNombre(String term);
-	
 	public void saveFactura(Factura factura);
-	
-	public Producto findProductoById(Long id);
 	
 	public TipoDocumento findTipoDocumentoById(Long id);
 	
@@ -47,4 +52,11 @@ public interface IClienteService {
 	public Factura fetchFacturaByIdWithClienteWithItemFacturaWithPoducto(Long id);
 	
 	public Cliente fetchClienteByIdWithFacturas(Long id);
+	
+	/*Kardex*/
+	public Kardex ultimoKardexPrd(Long id);
+	
+	public void saveKardex(Kardex kardex);
+	
+	public TipoMovimientoInv findTipoMovimientoInvById(Long id);
 }

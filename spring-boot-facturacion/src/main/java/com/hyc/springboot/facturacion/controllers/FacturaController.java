@@ -1,5 +1,6 @@
 package com.hyc.springboot.facturacion.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.hyc.springboot.facturacion.models.entity.Cliente;
 import com.hyc.springboot.facturacion.models.entity.Factura;
 import com.hyc.springboot.facturacion.models.entity.ItemFactura;
+import com.hyc.springboot.facturacion.models.entity.Kardex;
 import com.hyc.springboot.facturacion.models.entity.Producto;
 import com.hyc.springboot.facturacion.models.entity.TipoDocumento;
 import com.hyc.springboot.facturacion.models.service.IClienteService;
@@ -54,6 +56,7 @@ public class FacturaController {
 
 	}
 
+	@Secured("ROLE_USER")
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable Long id, Model model, RedirectAttributes flash) {
 		
@@ -70,6 +73,7 @@ public class FacturaController {
 		return "facturas/ver";
 	}
 	
+	@Secured("ROLE_USER")
 	@GetMapping("/form")
 	public String crear(Map<String, Object> model, RedirectAttributes flash) {
 		
@@ -85,6 +89,7 @@ public class FacturaController {
 		return "facturas/form";
 	}
 	
+	@Secured("ROLE_USER")
 	@PostMapping("/form")
 	public String guardar(@Valid Factura factura,
 			BindingResult result,
@@ -127,10 +132,13 @@ public class FacturaController {
 			return "facturas/form";
 		}
 		
+		List<Producto> listaPrd = new ArrayList<Producto>();
+		List<Kardex> listaKardex = new ArrayList<Kardex>();
+		
 		for(int i = 0; i < itemId.length; i++) {
 			Producto producto = clienteService.findProductoById(itemId[i]);
-			
-			if( producto.getExistencia() < cantidad[i]) {
+			Double existencia = producto.getExistencia();
+			if( existencia < cantidad[i] && producto.getInventariable()) {
 				List<Cliente> clientes =  clienteService.findAll();
 				List<TipoDocumento> tipoDocumentos =  clienteService.findTipoDocumentos();
 				
@@ -144,17 +152,43 @@ public class FacturaController {
 			linea.setCantidad(cantidad[i]);
 			linea.setProducto(producto);
 			linea.setPrecio(producto.getPrecio());
-			factura.addItemFactura(linea);
-			factura.setNumero(clienteService.siguienteNumeroRecibo(factura.getTipoDocumento().getId()));
+			factura.addItemFactura(linea);				
+			
+			if (producto.getInventariable()) {
+				producto.setExistencia(existencia - cantidad[i]);
+				Double saldo = clienteService.ultimoKardexPrd(producto.getId()).getSaldo();
+				
+				Kardex kardex = new Kardex();
+				
+				kardex.setProducto(producto);
+				kardex.setTipoMovimientoInv(clienteService.findTipoMovimientoInvById(Long.valueOf(3)));
+				kardex.setCantidad(cantidad[i]);
+				kardex.setCosto(producto.getCosto());
+				kardex.setSaldo(saldo - cantidad[i]);
+				kardex.setCostoSaldo(producto.getCosto());
+				kardex.setTotalSaldo((saldo - cantidad[i]) * producto.getCosto());
+				listaKardex.add(kardex);
+			}
+			listaPrd.add(producto);
+		}
+		factura.setNumero(clienteService.siguienteNumeroRecibo(factura.getTipoDocumento().getId()));
+		clienteService.saveFactura(factura);
+		
+		for(Producto p : listaPrd) {
+			clienteService.saveProducto(p);
 		}
 		
-		clienteService.saveFactura(factura);
+		for(Kardex k : listaKardex) {
+			clienteService.saveKardex(k);
+		}
+		
 		status.setComplete();
 		flash.addFlashAttribute("success", "Venta creada con éxito!");
 		
 		return "redirect:../ver/" + factura.getId().toString();
 	}
 	
+	/*@Secured("ROLE_ADMIN")
 	@GetMapping("/eliminar/{id}")
 	public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
 		
@@ -167,12 +201,26 @@ public class FacturaController {
 		flash.addFlashAttribute("error", "¡Venta no existe en la base de dados!");
 		return "redirect:/listar";
 	}
-	
+	*/
 	//@ResponseBody indica que es un jason
 	@GetMapping(value="/cargar-productos/{term}", produces= {"application/json"})
 	public @ResponseBody List<Producto> cargarProductos(@PathVariable String term){
 		//return clienteService.findByNombre(term);
 		return clienteService.findByNombre(term);
 	}
+	
+	@Secured("ROLE_ADMIN")
+	@GetMapping("/anular/{id}")
+	public String anular(@PathVariable Long id, RedirectAttributes flash) {
 		
+		Factura factura = clienteService.findFacturaById(id);
+		if(factura != null){
+			factura.setAnulada(true);
+			clienteService.saveFactura(factura);
+			flash.addFlashAttribute("success", "¡Documento anulado con éxito!");
+			return "redirect:../ver/"+ factura.getId().toString();
+		}
+		flash.addFlashAttribute("error", "¡Venta no existe en la base de dados!");
+		return "redirect:../";
+	}
 }

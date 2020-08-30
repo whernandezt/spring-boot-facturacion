@@ -11,12 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hyc.springboot.facturacion.models.dao.IClienteDao;
 import com.hyc.springboot.facturacion.models.dao.IFacturaDao;
+import com.hyc.springboot.facturacion.models.dao.IKardexDao;
 import com.hyc.springboot.facturacion.models.dao.IProductoDao;
 import com.hyc.springboot.facturacion.models.dao.ITipoDocumentoDao;
+import com.hyc.springboot.facturacion.models.dao.ITipoMovimientoDao;
 import com.hyc.springboot.facturacion.models.entity.Cliente;
 import com.hyc.springboot.facturacion.models.entity.Factura;
+import com.hyc.springboot.facturacion.models.entity.Kardex;
 import com.hyc.springboot.facturacion.models.entity.Producto;
 import com.hyc.springboot.facturacion.models.entity.TipoDocumento;
+import com.hyc.springboot.facturacion.models.entity.TipoMovimientoInv;
 
 
 @Service
@@ -33,6 +37,12 @@ public class ClienteServiceImpl implements IClienteService {
 	
 	@Autowired
 	private ITipoDocumentoDao tipoDocumentoDao;
+	
+	@Autowired
+	private IKardexDao kardexDao;
+	
+	@Autowired
+	private ITipoMovimientoDao tipoMovimiento;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -134,6 +144,29 @@ public class ClienteServiceImpl implements IClienteService {
 			return facturaDao.siguienteNumeroRecibo(tipoDoc);
 		}
 		return 0;
+	}
+
+	@Override
+	@Transactional
+	public void saveProducto(Producto producto) {
+		productoDao.save(producto);		
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Kardex ultimoKardexPrd(Long id) {
+		return kardexDao.ultimoKardexPrd(id);
+	}
+	
+	@Override
+	@Transactional
+	public void saveKardex(Kardex kardex) {
+		kardexDao.save(kardex);
+	}
+
+	@Override
+	public TipoMovimientoInv findTipoMovimientoInvById(Long id) {
+		return tipoMovimiento.findById(id).get();
 	}
 	
 }

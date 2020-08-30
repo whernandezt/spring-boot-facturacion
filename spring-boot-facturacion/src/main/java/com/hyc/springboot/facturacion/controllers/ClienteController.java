@@ -55,7 +55,7 @@ public class ClienteController {
 	public String crear(Map<String, Object> model) {
 		Cliente cliente = new Cliente();
 		model.put("cliente", cliente);
-		model.put("titulo", "Formulario de Cliente");
+		model.put("titulo", "DETALLE DE CLIENTE");
 		return "/clientes/form";
 	}
 
@@ -65,7 +65,7 @@ public class ClienteController {
 	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
 			Authentication authentication, RedirectAttributes flash, SessionStatus status) {
 		if (result.hasErrors()) {
-			model.addAttribute("titulo", "FORMULARIO DE CLIENTE");
+			model.addAttribute("titulo", "DETALLE DE CLIENTE");
 			return "/clientes/form";
 		}
 

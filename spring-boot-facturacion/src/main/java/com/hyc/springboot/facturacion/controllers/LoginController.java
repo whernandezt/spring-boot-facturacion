@@ -18,7 +18,7 @@ public class LoginController {
 		
 		if(principal != null) {
 			//flash.addFlashAttribute("info", "Ya ha iniciado sesión anteriormente");
-			return "redirect:/clientes/";
+			return "redirect:/facturas/";
 		}
 		
 		if(error != null) {
