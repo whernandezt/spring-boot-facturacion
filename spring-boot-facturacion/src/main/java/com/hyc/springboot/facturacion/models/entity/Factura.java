@@ -57,6 +57,9 @@ public class Factura implements Serializable {
 	@JoinColumn(name = "factura_id") // Generar llave foranea en facturas_items, de esta forma cuando no hay relacion
 										// de doble sentido
 	private List<ItemFactura> items;
+	
+	@Column(length = 30)
+	private String usuario;
 
 	public Factura() {
 		items = new ArrayList<ItemFactura>();
@@ -143,6 +146,14 @@ public class Factura implements Serializable {
 
 	public void addItemFactura(ItemFactura item) {
 		items.add(item);
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 	public Double getTotal() {

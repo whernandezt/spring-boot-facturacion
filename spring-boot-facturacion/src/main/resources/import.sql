@@ -1,3 +1,7 @@
+/*Populate table negocios*/
+insert into negocios(nombre, nombre_corto, iva) values('TecnoPhone Portillo', 'TecnoPhone', 13);
+
+
 /* Populate table clientes */
 INSERT INTO clientes (nombre, email, create_at) VALUES ('Walter Hernández', 'walhez.t@gmail.com', '2016-07-20');
 INSERT INTO clientes (nombre, email, create_at) VALUES ('William Tobar', 'wtobar.t@gmail.com', '2019-03-05');

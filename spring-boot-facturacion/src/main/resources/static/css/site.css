@@ -48,15 +48,7 @@ i{
     box-shadow: none !important;
 }
 
-.enMoney::before {
-    content:"$";
-}
-.negMoney {
-    color:red;
-}
-div.negMoney::before {
-    content:'($';
-}
-div.negMoney::after {
-    content:')';
-}
+.custom-file-text: (
+en: "Browse",
+es: "Elegir"
+);

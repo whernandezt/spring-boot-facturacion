@@ -10,6 +10,7 @@ import javax.validation.Valid;
 //import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -94,6 +95,7 @@ public class FacturaController {
 	public String guardar(@Valid Factura factura,
 			BindingResult result,
 			Map<String, Object> model,
+			Authentication authentication,
 			@RequestParam(name="item_id[]", required=false) Long[] itemId,
 			@RequestParam(name="cantidad[]", required=false) Double[] cantidad,
 			RedirectAttributes flash,
@@ -172,6 +174,7 @@ public class FacturaController {
 			listaPrd.add(producto);
 		}
 		factura.setNumero(clienteService.siguienteNumeroRecibo(factura.getTipoDocumento().getId()));
+		factura.setUsuario(authentication.getName());
 		clienteService.saveFactura(factura);
 		
 		for(Producto p : listaPrd) {
