@@ -46,7 +46,7 @@ public class NegocioController {
 		model.addAttribute("titulo", "DATOS DEL NEGOCIO");
 		model.addAttribute("negocio", negocio);
 		
-		return "negocio";
+		return "configuracion/negocio";
 	}
 	
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
