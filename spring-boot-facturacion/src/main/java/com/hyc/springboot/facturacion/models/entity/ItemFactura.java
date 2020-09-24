@@ -25,6 +25,8 @@ public class ItemFactura implements Serializable {
 	
 	private Double precio;
 	
+	private Double iva;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="producto_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -52,6 +54,14 @@ public class ItemFactura implements Serializable {
 
 	public void setPrecio(Double precio) {
 		this.precio = precio;
+	}
+	
+	public Double getIva() {
+		return iva;
+	}
+
+	public void setIva(Double iva) {
+		this.iva = iva;
 	}
 	
 	public Producto getProducto() {

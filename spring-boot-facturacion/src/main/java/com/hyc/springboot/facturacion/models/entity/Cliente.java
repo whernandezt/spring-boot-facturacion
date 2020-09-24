@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 //import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -36,7 +36,7 @@ public class Cliente implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // Estrategia con la que genera la llave la base de datos
 	private Long id;
 
-	@NotEmpty
+	@NotBlank
 	private String nombre;
 
 	@Email

@@ -47,16 +47,22 @@ public interface IClienteService {
 	
 	public void deleteFactura(Long id);
 	
-	public int siguienteNumeroRecibo(Long tipoDoc);
+	public int siguienteNumeroRecibo(Long tipoDoc, String serie);
 	
 	public Factura fetchFacturaByIdWithClienteWithItemFacturaWithPoducto(Long id);
 	
 	public Cliente fetchClienteByIdWithFacturas(Long id);
 	
+	public Integer cuentaFacturas(Long tipodDoc, Integer desde, Integer hasta);
+	
 	/*Kardex*/
-	public Kardex ultimoKardexPrd(Long id);
+	public Double ultimoTotalSaldoKardexPrd(Long id);
+	
+	public Double findCostoKardexMovimiento(Long movId, Long productoId, Long tipoId);
 	
 	public void saveKardex(Kardex kardex);
 	
 	public TipoMovimientoInv findTipoMovimientoInvById(Long id);
+	
+	public Long cuentaKardexPrd(Long idPrd);
 }

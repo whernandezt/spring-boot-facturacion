@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body class="sb-nav-fixed">
+	<header th:replace="layout/layout :: header"></header>
+	<div id="layoutSidenav">
+		<div th:replace="layout/layout :: menu"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid py-2">
+					<div th:replace="layout/layout :: messages"></div>
+					<div class="card bg-light">
+						<div class="card-header font-weight-bold">
+							<i class="fas fa-barcode"></i> <span th:text="${titulo}"></span>
+							<div class="float-right text-right mr-0 p-0">
+
+								<a th:href="@{/productos}" data-toggle="tooltip"
+									data-placement="bottom" title="Regresar" class="link-new">
+									<i class="fas fa-arrow-alt-circle-left"></i>
+								</a>
+							</div>
+						</div>
+						<div class="card-body">
+							<form th:action="@{/productos/form}" th:object="${producto}"
+								method="post">
+
+								<div class="row">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Nombre</label> <input
+											type="text" th:field="*{nombre}"
+											class="form-control form-control-sm"
+											th:errorclass="'form-control alert-danger'" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+									</div>
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Unidad</label> <select
+											class="form-control form-control-sm searchDrop"
+											th:field="${producto.unidad}"
+											placeholder="Seleccione una unidad">
+											<option value="">Seleccione</option>
+											<option th:each="unidad : ${unidades}"
+												th:value="${unidad.id}" th:text="${unidad.nombre}"></option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Precio</label> <input
+											type="text" th:field="*{precio}"
+											class="form-control form-control-sm"
+											th:errorclass="'form-control alert-danger'" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></small>
+									</div>
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Costo</label> <input type="text"
+											th:field="*{costo}" class="form-control form-control-sm"
+											th:errorclass="'form-control alert-danger'" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('costo')}" th:errors="*{costo}"></small>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Inventariable</label> <input
+											id="chb_inventariable" type="checkbox"
+											th:field="*{inventariable}"
+											th:checked="${producto.inventariable}" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('inventariable')}"
+											th:errors="*{inventariable}"></small>
+									</div>
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Exento de iva</label> <input
+											type="checkbox" th:field="*{exento}"
+											th:checked="${producto.exento}" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('exento')}" th:errors="*{exento}"></small>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Existencia</label> <input
+											id="prd_existencia" type="text" th:field="*{existencia}"
+											class="form-control form-control-sm"
+											th:errorclass="'form-control alert-danger'"
+											th:disabled="${not producto.inventariable or producto.id != null}" />
+										<small class="form-text text-danger"
+											th:if="${#fields.hasErrors('existencia')}"
+											th:errors="*{existencia}"></small>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-6">
+										<input type="submit" value="Guardar"
+											class="btn btn-sm btn-secondary" /> 
+											<input id="hdf_codprd"
+											type="hidden" th:field="*{id}" />
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer th:replace="layout/layout :: footer"></footer>
+		</div>
+	</div>
+</body>
+</html>

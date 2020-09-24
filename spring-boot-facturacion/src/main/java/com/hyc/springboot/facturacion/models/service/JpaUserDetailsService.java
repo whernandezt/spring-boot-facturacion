@@ -40,8 +40,8 @@ public class JpaUserDetailsService implements UserDetailsService{
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		
 		for(Role role: usuario.getRoles()) {
-			log.info("Role: ".concat(role.getAuthority()));
-			authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+			log.info("Role: ".concat(role.getNombre()));
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getNombre()));
 		}
 		
 		if(authorities.isEmpty()) {

@@ -3,7 +3,6 @@ package com.hyc.springboot.facturacion.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +15,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "productos")
@@ -25,9 +27,11 @@ public class Producto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotBlank
 	private String nombre;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "unidad_id")
 	private Unidad unidad;
 
@@ -48,6 +52,8 @@ public class Producto implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_at")
 	private Date createAt;
+	
+	private String usuario;
 
 	@PrePersist // Antes de guardar que asigne la fecha actual
 	public void prePersist() {
@@ -140,6 +146,14 @@ public class Producto implements Serializable {
 
 	public void setExistencia(Double existencia) {
 		this.existencia = existencia;
+	}
+	
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuarioe(String usuario) {
+		this.usuario = usuario;
 	}
 
 	private static final long serialVersionUID = 1L;

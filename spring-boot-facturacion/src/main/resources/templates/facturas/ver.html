@@ -21,7 +21,7 @@
 								</a> <a th:href="@{'/facturas/ver/' +  ${factura.id}(format=pdf)}"
 									data-toggle="tooltip" data-placement="bottom" title="Imprimir"
 									class="link-new" target="_blank"> <i class="fa fa-print"></i>
-								</a> <a th:if="${not factura.isAnulada()}"
+								</a> <a th:if="${not factura.isAnulada()}" sec:authorize="hasRole('ROLE_ADMINISTRADOR')" 
 									th:href="@{'/facturas/anular/' +  ${factura.id}}"
 									data-toggle="tooltip" data-placement="bottom" title="Anular"
 									class="link-new"

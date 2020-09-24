@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head">
 </head>
-<body>
+<body class="sb-nav-fixed">
 	<header th:replace="layout/layout :: header"></header>
 	<div id="layoutSidenav">
 		<div th:replace="layout/layout :: menu"></div>
@@ -84,7 +84,7 @@
 										<label class="col-form-label">IVA (%)</label> <input
 											type="text" th:field="*{iva}"
 											class="form-control form-control-sm"
-											th:errorclass="'form-control is-invalid'" />
+											th:errorclass="'form-control is-invalid'" onkeypress="return isNumberKey(event)" />
 										<div class="invalid-feedback"
 											th:if="${#fields.hasErrors('iva')}" th:errors="*{iva}"></div>
 									</div>
@@ -108,6 +108,17 @@
 											th:errors="*{direccion}"></div>
 									</div>
 
+								</div>
+								<div class="row">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Teléfono</label> <input
+											type="text" th:field="*{telefono}"
+											class="form-control form-control-sm"
+											th:errorclass="'form-control is-invalid'" />
+										<div class="invalid-feedback"
+											th:if="${#fields.hasErrors('telefono')}"
+											th:errors="*{telefono}"></div>
+									</div>
 								</div>
 								<div class="row">
 									<div class="col-sm-12 mb-3">

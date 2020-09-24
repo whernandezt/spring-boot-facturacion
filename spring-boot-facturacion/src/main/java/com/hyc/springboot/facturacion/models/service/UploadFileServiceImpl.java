@@ -3,6 +3,7 @@ package com.hyc.springboot.facturacion.models.service;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,6 +36,13 @@ public class UploadFileServiceImpl implements IUploadFileService {
 			throw new RuntimeException("Error: no se puede cargar la imagen: " + pathFoto.toString());
 		}
 		return recurso;
+	}
+	
+	@Override
+	public URL loadAsUrl(String filename) throws MalformedURLException  {
+		Path pathFoto = getPath(filename);
+		URL img = pathFoto.toUri().toURL();
+		return img;
 	}
 
 	@Override

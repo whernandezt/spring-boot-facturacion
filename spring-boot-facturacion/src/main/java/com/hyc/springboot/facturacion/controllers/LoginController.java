@@ -29,6 +29,7 @@ public class LoginController {
 			@RequestParam(value="logout", required= false) String logout,
 			Model model, Principal principal, RedirectAttributes flash) {
 		
+		model.addAttribute("titulo","Login");
 		if(principal != null) {
 			//flash.addFlashAttribute("info", "Ya ha iniciado sesión anteriormente");
 			return "redirect:/facturas/";

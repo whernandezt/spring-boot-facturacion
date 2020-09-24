@@ -25,11 +25,11 @@ public class SpringBootFacturacionApplication {
 			
 	
 	public void run(String... args) throws Exception {
-		uploadSerive.deleteAll();
+		//uploadSerive.deleteAll();
 		uploadSerive.init();
 		
 		//Metodo para generar contraseñas encriptadas
-		String password = "12345";
+		String password = "hc2020";
 		for(int i = 0; i<2;i++) {
 		 
 			String bcryptPassword = passwordEconder.encode(password);

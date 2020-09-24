@@ -38,7 +38,6 @@ public class ClienteController {
 	private IClienteService clienteService;
 
 	
-	@Secured("ROLE_USER")
 	@RequestMapping(value = {"/",""}, method = RequestMethod.GET)
 	public String listar(Model model) {
 
@@ -50,7 +49,6 @@ public class ClienteController {
 
 	}
 	
-	@Secured("ROLE_USER")
 	@RequestMapping(value = "/form")
 	public String crear(Map<String, Object> model) {
 		Cliente cliente = new Cliente();
@@ -59,8 +57,6 @@ public class ClienteController {
 		return "/clientes/form";
 	}
 
-
-	@Secured("ROLE_USER")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
 			Authentication authentication, RedirectAttributes flash, SessionStatus status) {
@@ -81,8 +77,6 @@ public class ClienteController {
 		return "redirect:/clientes";
 	}
 
-
-	@Secured("ROLE_USER")
 	@RequestMapping(value = "/form/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
@@ -96,21 +90,26 @@ public class ClienteController {
 			}
 		} else {
 			flash.addFlashAttribute("error", "¡El Id del cliente debe ser mayor a 0!");
-			return "redirect:/clientes/listar";
+			return "redirect:/clientes";
 		}
 		model.put("cliente", cliente);
-		model.put("titulo", "Editar Cliente");
+		model.put("titulo", "DETALLE DE CLIENTE");
 		return "/clientes/form";
 	}
 
 
-	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMINISTRADOR")
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
 			Cliente cliente = clienteService.findOne(id);
 			if (cliente == null) {
 				flash.addFlashAttribute("error", "¡El Id del cliente no existe!");
+				return "redirect:/clientes";
+			}
+			else if(!cliente.getFacturas().isEmpty())
+			{
+				flash.addFlashAttribute("error", "¡No se puede eliminar el registro porque posee dependencias!");
 				return "redirect:/clientes";
 			}
 			else {

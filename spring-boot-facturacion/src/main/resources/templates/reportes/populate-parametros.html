@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+		//$(document).ready(function(){
+			function cargaParametros(id) {
+				$.ajax({
+		            type: "GET",
+		            url:"/reportes/generar/cargar-parametros/" + id,
+		            dataType: "json",
+		            success: function (data) {
+		            	$('#cargarParametros').empty();
+		            	var div_data = '';
+		            	var form = '<form action="/reportes/generar/export/' + id + '" method="GET">';
+		            	$.each(data,function(i,obj)
+		                {
+		                	div_data = div_data + "<div class=\"row\"><div class=\"col-sm-2 mb-3\"> <Label>" + obj.nombre + "</Label></div>" +
+		                	'<div class=\"col-sm-10 mb-3\">';
+			               
+			                if(obj.tipo == "L"){
+			                	var options = '';
+			                	//div_data = div_data + '<input type="hidden" value="' + obj.orden + '" name="par_order[]" />';
+			                	div_data = div_data + "<select class=\"form-control form-control-sm\" name=\"par_valor[]\">"
+			                	$.each(obj.resultSelect, function(key, value) {
+			                		options = options + '<option value="'+ key +'">' + value[1] + '</option>';
+			                	});
+			                	div_data = div_data + options + "</select>";
+			                }
+			                else{
+			                	div_data = div_data + '<input class="form-control form-control-sm w-auto" type="'+ (obj.tipo == "T" ? "text" : "date")  + '" name="par_valor[]" required />';
+			                }
+			                div_data = div_data + "</div></div>";
+			                });
+		            	var button = '<div class="row"> <div class="col-sm-2 mb-3"></div> <div class="col-sm-10 mb-3"> <input id="btnGenerarRpt" type="submit" value="Generar" class="btn btn-secondary" /> </div></div> </form>';
+		            	$(form + div_data + button).appendTo('#cargarParametros'); 
+		                }
+		          });
+				}
+		
+	</script>
+
+</body>
+</html>

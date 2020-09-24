@@ -3,7 +3,6 @@ package com.hyc.springboot.facturacion.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +15,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -26,25 +26,32 @@ public class DocumentoInicial implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tipo_documento_id")
 	private TipoDocumento tipoDocumento;
 	
+	@Column(length = 25)
 	private String serie;
 	
+	@NotNull
 	private Integer desde;
 	
+	@NotNull
 	private Integer hasta;
 	
 	private Boolean activo;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="create_at")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createAt;
 	
-	@PrePersist // Antes de guardar que asigne la fecha actual
+	@Column(length = 30)
+	private String usuario;
+	
+	@PrePersist 
 	public void prePersist() {
 		createAt = new Date();
+		activo = true;
 	}
 	
 	
@@ -108,7 +115,7 @@ public class DocumentoInicial implements Serializable {
 
 
 
-	public Boolean isActivo() {
+	public Boolean getActivo() {
 		return this.activo;
 	}
 
@@ -116,8 +123,14 @@ public class DocumentoInicial implements Serializable {
 		this.activo = activo;
 	}
 
-
-
+	public String getUsuario() {
+		return usuario;
+	}
+	
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	
 	private static final long serialVersionUID = 1L;
 
 }

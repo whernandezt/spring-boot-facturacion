@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import com.sun.istack.NotNull;
 
@@ -20,11 +20,11 @@ public class Negocio implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty
+	@NotBlank
 	@Column(length = 100)
 	private String nombre;
 	
-	@NotEmpty
+	@NotBlank
 	@Column(name= "nombre_corto",length = 50)
 	private String nombreCorto;
 	
@@ -42,6 +42,9 @@ public class Negocio implements Serializable {
 	
 	@NotNull
 	private Double iva;
+	
+	@Column(length = 25)
+	private String telefono;
 	
 	
 	public Long getId() {
@@ -121,6 +124,15 @@ public class Negocio implements Serializable {
 
 	public void setIva(Double iva) {
 		this.iva = iva;
+	}
+	
+	public String getTelefono() {
+		return telefono;
+	}
+
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 
 

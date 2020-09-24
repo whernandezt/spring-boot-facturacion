@@ -1,21 +1,30 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/layout/layout :: head">
+<head th:replace="layout/layout :: head">
 </head>
-<body>
-	<header th:replace="/layout/layout :: header"></header>
-	<div class="container py-2">
-		<div class="card bg-danger text-white">
-			<div class="card-header">Error: Acceso denegado</div>
-			<div class="card-body">
-				<h5 class="card-title">Lo sentimos <span th:text="${#authentication.name}"></span>, no tienes permisos para acceder a este recurso.</h5>
-				<a th:href="@{/facturas}" class="btn btn-outline-light" role="button">Ir al inicio</a>
-			</div>
+<body class="sb-nav-fixed">
+	<header th:replace="layout/layout :: header"></header>
+	<div id="layoutAuthentication">
+		<div id="layoutAuthentication_content">
+			<main>
+				<div class="container-fluid py-5">
+						<div class="card bg-danger text-white">
+							<div class="card-header">Error: Acceso denegado</div>
+							<div class="card-body">
+								<h5 class="card-title">
+									Lo sentimos <span th:text="${#authentication.name}"></span>, no
+									tienes permisos para acceder a este recurso.
+								</h5>
+								<a th:href="@{/facturas}" class="btn btn-outline-light"
+									role="button">Ir al inicio</a>
+							</div>
+						</div>
+				</div>
+			</main>
+		</div>
+		<div id="layoutAuthentication_footer">
+			<footer th:replace="layout/layout :: footer"></footer>
 		</div>
 	</div>
-
-	<footer th:replace="/layout/layout :: footer"></footer>
-</body>
-</html>
-
 </body>
 </html>

@@ -23,6 +23,8 @@ public class Kardex implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private String descripcion;
+	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "tipo_movimiento_id")
 	private TipoMovimientoInv tipoMovimientoInv;
@@ -100,6 +102,17 @@ public class Kardex implements Serializable {
 
 	public Long getMovId() {
 		return movId;
+	}
+
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 

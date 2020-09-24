@@ -11,8 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "users")
@@ -25,8 +30,10 @@ public class Usuario implements Serializable {
 	@Column(length = 30, unique = true)
 	private String username;
 	
+	@NotBlank
 	private String nombre;
 	
+	@NotBlank
 	private String apellido;
 
 	public String getNombre() {
@@ -38,8 +45,10 @@ public class Usuario implements Serializable {
 
 	private Boolean enabled;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
+			@UniqueConstraint(columnNames = { "user_id", "role_id" }) })
 	private List<Role> roles;
 
 	public Long getId() {

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body class="sb-nav-fixed">
+	<header th:replace="layout/layout :: header"></header>
+	<div id="layoutSidenav">
+		<div th:replace="layout/layout :: menu"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid py-2">
+					<div th:replace="layout/layout :: messages"></div>
+					<div class="card bg-light">
+						<div class="card-header font-weight-bold">
+							<i class="fas fa-clipboard"></i> <span th:text="${titulo}"></span>
+							<div class="float-right text-right mr-0 p-0">
+
+								<a th:href="@{/documentos}" data-toggle="tooltip"
+									data-placement="bottom" title="Regresar" class="link-new">
+									<i class="fas fa-arrow-alt-circle-left"></i>
+								</a>
+							</div>
+						</div>
+						<div class="card-body">
+							<form th:action="@{/documentos/form}" th:object="${documento}"
+								method="post">
+								
+								<div class="row">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Tipo documento</label> <select
+											class="form-control form-control-sm"
+											th:field="${documento.tipoDocumento}">
+											<option th:each="tipo : ${tiposDocumento}"
+												th:value="${tipo.id}" th:text="${tipo.nombre}"
+												th:if="${tipo.id != 1}"></option>
+										</select> <small class="form-text text-danger"
+											th:if="${#fields.hasErrors('tipoDocumento')}"
+											th:errors="*{tipoDocumento}"></small>
+									</div>
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Serie</label> <input type="text"
+											th:field="*{serie}" class="form-control form-control-sm"
+											th:errorclass="'form-control alert-danger'" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('serie')}" th:errors="*{serie}"></small>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Desde</label> <input
+											type="number" th:field="*{desde}"
+											class="form-control form-control-sm col-sm-4"
+											th:errorclass="'form-control alert-danger'" min="1" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('desde')}" th:errors="*{desde}"></small>
+									</div>
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Hasta</label> <input
+											type="number" th:field="*{hasta}"
+											class="form-control form-control-sm col-sm-4"
+											th:errorclass="'form-control alert-danger'" min="1" /> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('hasta')}" th:errors="*{hasta}"></small>
+									</div>
+								</div>
+								<div class="row" th:if="${documento.id != null}">
+									<div class="col-12 col-md-6 mb-3">
+										<label class="col-form-label">Activo</label> <input
+											type="checkbox"
+											th:field="*{activo}"
+											th:checked="${documento.activo}" disabled/> <small
+											class="form-text text-danger"
+											th:if="${#fields.hasErrors('activo')}"
+											th:errors="*{activo}"></small>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<div class="col-sm-6">
+										<input type="submit" value="Guardar"
+											class="btn btn-sm btn-secondary" th:if="${documento.activo}" />
+										 <input id="hdf_codprd"
+											type="hidden" th:field="*{id}" />
+									</div>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer th:replace="layout/layout :: footer"></footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf/extras/spring-security">
+<head th:replace="layout/layout :: head">
+</head>
+<body class="sb-nav-fixed">
+	<header th:replace="layout/layout :: header"></header>
+	<div id="layoutSidenav">
+		<div th:replace="layout/layout :: menu"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid py-2">
+					<div th:replace="layout/layout :: messages"></div>
+					<div class="card bg-light">
+						<div class="card-header font-weight-bold">
+							<i class="fas fa-barcode"></i> <span th:text="${titulo}"></span>
+							<div class="float-right text-right m-0 p-0">
+								<div
+									class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+									<div class="input-group">
+										<input type="text" class="form-control form-control-sm search"
+											autofocus="autofocus" aria-label="Buscar"
+											aria-describedby="basic-addon2"></input>
+										<div class="input-group-append">
+											<button class="btn btn-sm btn-dark" type="button">
+												<i class="fas fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<a th:href="@{/productos/form}" data-toggle="tooltip"
+									data-placement="bottom" title="Nuevo" class="link-new"> <i
+									class="fas fa-plus-circle"></i>
+								</a>
+							</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-responsive table-striped primaryTable">
+								<thead class="thead-inverse">
+									<tr>
+										<th style="width: 1%;"></th>
+										<th sec:authorize="hasRole('ROLE_ADMINISTRADOR')" style="width: 1%;"></th>
+										<th>Nombre</th>
+										<th>Precio actual</th>
+										<th>Existencia</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="producto:${productos}">
+										<td style="width: 1%;"></td>
+										<td sec:authorize="hasRole('ROLE_ADMINISTRADOR')"><a
+											class="link-new" data-toggle="tooltip" title="Eliminar"
+											th:href="@{/productos/eliminar/} + ${producto.id}"
+											onclick="return confirm('¿Seguro que desea eliminar el registro?');">
+												<i class="fas fa-trash"></i>
+										</a></td>
+										<td><a th:href="@{/productos/form/} + ${producto.id}"
+											th:text="${producto.nombre}"></a></td>
+										<td th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 2, 'POINT')}"></td>
+										<td th:text="${producto.existencia}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer th:replace="layout/layout :: footer"></footer>
+		</div>
+	</div>
+</body>
+</html>

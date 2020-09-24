@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf/extras/spring-security">
+<head th:replace="layout/layout :: head">
+</head>
+<body class="sb-nav-fixed">
+	<header th:replace="layout/layout :: header"></header>
+	<div id="layoutSidenav">
+		<div th:replace="layout/layout :: menu"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid py-2">
+					<div th:replace="layout/layout :: messages"></div>
+					<div class="card bg-light">
+						<div class="card-header font-weight-bold">
+							<i class="fa fa-users"></i> <span th:text="${titulo}"></span>
+							<div class="float-right text-right m-0 p-0">
+								<div
+									class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+									<div class="input-group">
+										<input type="text" class="form-control form-control-sm search"
+											autofocus="autofocus" aria-label="Buscar"
+											aria-describedby="basic-addon2"></input>
+										<div class="input-group-append">
+											<button class="btn btn-sm btn-dark" type="button">
+												<i class="fas fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-12 col-md-6">
+									<div class="text-center">
+										<h6>Reportes</h6>
+									</div>
+									<table
+										class="table table-responsive table-striped primaryTable">
+										<thead>
+											<tr class="d-none">
+												<th></th>
+												<th>Nombre</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="report:${reportes}">
+												<td style="width: 1%;"></td>
+												<td><a th:text="${report.nombre}" href="#"
+													th:attr="onclick=|cargaParametros('${report.id}')|"></a></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="col-12 col-md-6">
+									<div class="text-center">
+										<h6>Parámetros</h6>
+									</div>
+									<div id="cargarParametros"></div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer th:replace="layout/layout :: footer"></footer>
+			<script th:replace="reportes/populate-parametros :: javascript"></script>
+		</div>
+	</div>
+</body>
+</html>

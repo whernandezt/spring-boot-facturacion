@@ -2,13 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head">
 </head>
-<body>
+<body class="sb-nav-fixed">
 	<header th:replace="layout/layout :: header"></header>
 	<div id="layoutSidenav">
 		<div th:replace="layout/layout :: menu"></div>
 		 <div id="layoutSidenav_content">
 		     <main>
-				<div class="container py-2">
+				<div class="container-fluid py-2">
+				<div th:replace="layout/layout :: messages"></div>
 					<div class="card bg-light">
 						<div class="card-header font-weight-bold">
 							<i class="fas fa-file-invoice-dollar"></i> <span th:text="${titulo}"></span>

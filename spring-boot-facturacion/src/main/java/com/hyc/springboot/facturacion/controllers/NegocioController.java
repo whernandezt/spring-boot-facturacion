@@ -22,7 +22,7 @@ import com.hyc.springboot.facturacion.models.entity.Negocio;
 import com.hyc.springboot.facturacion.models.service.IConfiguracionService;
 import com.hyc.springboot.facturacion.models.service.IUploadFileService;
 
-@Secured("ROLE_USER")
+@Secured("ROLE_ADMINISTRADOR")
 @Controller
 @RequestMapping("/negocio")
 @SessionAttributes("negocio")
